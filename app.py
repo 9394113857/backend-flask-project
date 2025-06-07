@@ -35,7 +35,7 @@ def get_current_time():
 @app.route('/')
 def hello_world():
     return jsonify({
-        'message': 'Hello, World!',
+        'message': 'Hello, Universe!',  # Changed from Hello, World!
         'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
         'time': datetime.now(timezone.utc).strftime('%H:%M:%S'),
         'timestamp': get_current_time()
