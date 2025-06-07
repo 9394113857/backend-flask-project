@@ -1,0 +1,17 @@
+# Update pip to the latest version
+python -m pip install --upgrade pip  # This updates pip to the newest version
+
+# Run a Flask application (assuming the app is in the current directory)
+flask run  # Starts the Flask web server
+
+
+=================================================
+
+Explanation:
+1.	python -m pip install --upgrade pip: This updates the pip package manager to the latest version.
+2.	flask run: This starts the Flask web application, assuming Flask is installed and there’s a app.py or similar file in your directory.
+
+Things to note in VSCode with PowerShell:
+1.	Ensure you're in the correct Python environment where Flask is installed (you can use a virtual environment if needed).
+2.	If you haven't set up Flask yet, you'll need to install it first by running pip install flask in the terminal.
+

@@ -1,0 +1,23 @@
+Start-Process "chrome" "http://127.0.0.1:5000"; flask run
+
+===============================================
+
+# Starts a new PowerShell process, waits for 3 seconds, then opens Chrome at http://127.0.0.1:5000, and starts the Flask server to serve the app, all in the background.
+Start-Process powershell -ArgumentList "Start-Sleep -Seconds 3; Start-Process chrome http://127.0.0.1:5000; flask run"
+
+
+Explanation in the comment:
+Starts a new PowerShell process (Start-Process powershell).
+
+Waits for 3 seconds (Start-Sleep -Seconds 3).
+
+Launches Chrome and opens http://127.0.0.1:5000 (Start-Process chrome http://127.0.0.1:5000).
+
+Starts the Flask server to serve your application (flask run).
+
+How the processes work:
+The PowerShell process runs the entire sequence.
+
+In the background, Chrome is launched after the delay, and Flask starts the server, making everything work together!
+
+This comment should clarify the entire flow in a single line. You can paste this into your PowerShell script to document what the command does.

@@ -1,0 +1,68 @@
+
+Ngrok Setup and Usage Notes
+
+1. Download ngrok for your OS from https://ngrok.com/download
+
+2. Run your Flask app locally:
+   python app.py
+   (Runs app at http://127.0.0.1:5000)
+
+3. Signup at ngrok: https://ngrok.com/signup
+
+4. Get your authtoken: https://dashboard.ngrok.com/get-started/your-authtoken
+
+5. Add authtoken to ngrok config:
+   ngrok config add-authtoken <your-authtoken>
+
+6. Start tunnel to localhost port 5000:
+   ngrok http 5000
+
+7. Access your app from public URL:
+   e.g., https://f77d-49-205-115-255.ngrok-free.app
+
+8. Keep Flask running locally while ngrok forwards requests.
+
+9. To stop ngrok: Ctrl+C
+
+Common Errors:
+- ERR_NGROK_4018: Means you need to add your authtoken.
+- Make sure to use a verified account.
+
+Additional Notes:
+- Ngrok web interface at http://127.0.0.1:4040 shows connection info.
+- You can share the ngrok URL for live testing with Postman or frontend apps.
+
+---
+
+Flask Backend with CORS & JSON Response Example Commands
+
+1. Install flask-cors:
+   pip install flask-cors
+
+2. Sample Flask code snippet:
+   from flask import Flask, jsonify, request
+   from flask_cors import CORS
+
+   app = Flask(__name__)
+   CORS(app)
+
+   @app.route('/api/data', methods=['POST'])
+   def data():
+       data = request.json
+       return jsonify({'received': data})
+
+3. Run your Flask app and test using Postman:
+   POST https://your-ngrok-url/api/data
+   Body (raw JSON):
+   {
+       "key": "value"
+   }
+
+---
+
+Ngrok commands summary:
+- ngrok config add-authtoken <token>
+- ngrok http 5000
+- Ctrl+C to stop
+
+Keep your Flask app running locally when using ngrok.

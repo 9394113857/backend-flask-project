@@ -1,0 +1,12 @@
+git commit -m "Initial Commit - Flask Backend Auth API with SQLite, Flask-Migrate & CORS
+
+1. Set up Flask application with SQLite and SQLAlchemy integration.
+2. Configured Flask-Migrate for database schema versioning.
+3. Enabled CORS for cross-platform API testing (Postman/ngrok ready).
+4. Implemented secure user authentication (register, login, logout) using hashlib for password hashing.
+5. Added profile and home routes returning JSON responses.
+6. Structured project using Blueprints for modular route organization.
+7. Verified core API flows (auth & profile) with Postman and ngrok tunnel.
+8. All initial routes tested and working — ready for further API development.
+
+Committed on: $(date '+%Y-%m-%d %H:%M:%S')"

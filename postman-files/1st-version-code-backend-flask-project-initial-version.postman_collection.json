@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "22234390-3adc-4a85-8d52-974808c2c3dd",
+		"name": "backend-flask-project-initial-version",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32949464"
+	},
+	"item": [
+		{
+			"name": "1.Purpose: Check welcome message",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://f77d-49-205-115-255.ngrok-free.app/",
+					"protocol": "https",
+					"host": [
+						"f77d-49-205-115-255",
+						"ngrok-free",
+						"app"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.Purpose: Login with username & password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://f77d-49-205-115-255.ngrok-free.app/login",
+					"protocol": "https",
+					"host": [
+						"f77d-49-205-115-255",
+						"ngrok-free",
+						"app"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3.Purpose: Get user profile info (no auth check here, just dummy response)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://f77d-49-205-115-255.ngrok-free.app/profile",
+					"protocol": "https",
+					"host": [
+						"f77d-49-205-115-255",
+						"ngrok-free",
+						"app"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
