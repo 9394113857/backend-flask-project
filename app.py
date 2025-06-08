@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 # === Initialize the Flask app ===
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True) 
 
 # === App Configurations ===
 app.secret_key = 'your secret key'
