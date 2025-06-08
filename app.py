@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, session
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy 
 from flask_migrate import Migrate 
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
