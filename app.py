@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-from datetime import datetime, timezone 
+from datetime import datetime, timezone  
 
 # === Initialize the Flask app ===
 app = Flask(__name__) 
