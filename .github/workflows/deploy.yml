@@ -13,29 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up SSH and Deploy via PythonAnywhere
+      - name: Set up SSH and Execute Deployment Script on PythonAnywhere
         env:
           PA_USERNAME: ${{ secrets.PA_USERNAME }}
           PA_PASSWORD: ${{ secrets.PA_PASSWORD }}
         run: |
-          # Install sshpass to allow SSH login
+          # Install sshpass to allow SSH login via password
           sudo apt-get update
           sudo apt-get install -y sshpass
 
-          # SSH into PythonAnywhere and pull the latest changes
-          sshpass -p "$PA_PASSWORD" ssh -o StrictHostKeyChecking=no $PA_USERNAME@ssh.pythonanywhere.com "
-            # Navigate to your app directory
-            cd /home/$PA_USERNAME/backend-flask-project &&  
-            
-            # Pull the latest changes from the 'initial-setup' branch
-            git pull origin initial-setup &&  
-
-            # Activate your virtual environment
-            source /home/$PA_USERNAME/.virtualenvs/flaskenv/bin/activate &&  
-
-            # Install any new dependencies from requirements.txt
-            pip install -r requirements.txt &&  
-
-            # Reload the web app by touching the WSGI file (restart the app)
-            touch /var/www/$PA_USERNAME_pythonanywhere_com_wsgi.py
+          # SSH into PythonAnywhere and run the deploy.sh script
+          # Make sure the deploy.sh script is executable and then run it.
+          sshpass -p "$PA_PASSWORD" ssh -o StrictHostKeyChecking=no "$PA_USERNAME@ssh.pythonanywhere.com" "
+            chmod +x /home/$PA_USERNAME/deploy.sh && \\
+            /home/$PA_USERNAME/deploy.sh
           "
