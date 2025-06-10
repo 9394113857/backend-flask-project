@@ -1,0 +1,41 @@
+name: 🚀 Deploy to PythonAnywhere
+
+on:
+  push:
+    branches:
+      - initial-setup  # This will trigger the deployment when you push to the 'initial-setup' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH and Deploy via PythonAnywhere
+        env:
+          PA_USERNAME: ${{ secrets.PA_USERNAME }}
+          PA_PASSWORD: ${{ secrets.PA_PASSWORD }}
+        run: |
+          # Install sshpass to allow SSH login
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+          # SSH into PythonAnywhere and pull the latest changes
+          sshpass -p "$PA_PASSWORD" ssh -o StrictHostKeyChecking=no $PA_USERNAME@ssh.pythonanywhere.com "
+            # Navigate to your app directory
+            cd /home/$PA_USERNAME/backend-flask-project &&  
+            
+            # Pull the latest changes from the 'initial-setup' branch
+            git pull origin initial-setup &&  
+
+            # Activate your virtual environment
+            source /home/$PA_USERNAME/.virtualenvs/flaskenv/bin/activate &&  
+
+            # Install any new dependencies from requirements.txt
+            pip install -r requirements.txt &&  
+
+            # Reload the web app by touching the WSGI file (restart the app)
+            touch /var/www/$PA_USERNAME_pythonanywhere_com_wsgi.py
+          "
