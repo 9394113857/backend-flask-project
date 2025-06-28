@@ -3,67 +3,56 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import timedelta, datetime
+import pytz
 import re
-from datetime import datetime, timezone
 
-# === Initialize the Flask app ===
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# === App Configurations ===
+# Configuration
 app.secret_key = 'your secret key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pythonlogin.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.permanent_session_lifetime = timedelta(minutes=30)
 
-# === Initialize database and migration ===
+# Initialize extensions
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# === User Model ===
+# Models
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
 
-# === Helper Function ===
-def get_current_time():
-    return datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+# Helper to get IST time locally
+def get_current_ist_time():
+    try:
+        ist = pytz.timezone('Asia/Kolkata')
+        now = datetime.now(ist)
+        return {
+            'date': now.strftime('%Y-%m-%d'),
+            'time': now.strftime('%H:%M:%S'),
+            'timestamp': now.strftime('%Y-%m-%d %H:%M:%S')
+        }
+    except Exception as e:
+        print("Failed to get local IST time:", str(e))
+        return {
+            'date': 'N/A',
+            'time': 'N/A',
+            'timestamp': 'N/A'
+        }
 
-# === Routes ===
-
+# Routes
 @app.route('/')
 def hello_world():
+    ist_time = get_current_ist_time()
     return jsonify({
         'message': 'Hello, World!',
-        'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
-        'time': datetime.now(timezone.utc).strftime('%H:%M:%S'),
-        'timestamp': get_current_time()
+        **ist_time
     })
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    if not username or not password:
-        return jsonify({'error': 'Username and password required'}), 400
-
-    account = Account.query.filter_by(username=username).first()
-    if account and check_password_hash(account.password, password):
-        session['loggedin'] = True
-        session['id'] = account.id
-        session['username'] = account.username
-        return jsonify({
-            'message': 'Login successful',
-            'username': account.username,
-            'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
-            'time': datetime.now(timezone.utc).strftime('%H:%M:%S'),
-            'timestamp': get_current_time()
-        }), 200
-
-    return jsonify({'error': 'Incorrect username or password'}), 401
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -88,45 +77,46 @@ def register():
 
     return jsonify({'message': 'Registration successful'}), 201
 
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({'error': 'Username and password required'}), 400
+
+    account = Account.query.filter_by(username=username).first()
+    if account and check_password_hash(account.password, password):
+        session.permanent = True
+        session['loggedin'] = True
+        session['id'] = account.id
+        session['username'] = account.username
+        ist_time = get_current_ist_time()
+        return jsonify({
+            'message': 'Login successful',
+            'username': account.username,
+            **ist_time
+        }), 200
+
+    return jsonify({'error': 'Incorrect username or password'}), 401
+
 @app.route('/home', methods=['GET'])
 def home():
     if 'loggedin' in session:
+        ist_time = get_current_ist_time()
         return jsonify({
             'message': f"Welcome {session['username']}!",
-            'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
-            'time': datetime.now(timezone.utc).strftime('%H:%M:%S'),
-            'timestamp': get_current_time()
+            **ist_time
         }), 200
     return jsonify({'error': 'Unauthorized'}), 401
 
-@app.route('/profile', methods=['GET'])
-def profile():
-    if 'loggedin' in session:
-        account = Account.query.filter_by(id=session['id']).first()
-        if account:
-            return jsonify({
-                'id': account.id,
-                'username': account.username,
-                'email': account.email,
-                'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
-                'time': datetime.now(timezone.utc).strftime('%H:%M:%S'),
-                'timestamp': get_current_time()
-            }), 200
-    return jsonify({'error': 'Unauthorized'}), 401
-
-@app.route('/logout', methods=['GET'])
+@app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
-    return jsonify({
-        'message': 'Logged out successfully',
-        'date': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
-        'time': datetime.now(timezone.utc).strftime('%H:%M:%S'),
-        'timestamp': get_current_time()
-    }), 200
+    ist_time = get_current_ist_time()
+    return jsonify({'message': 'Logged out successfully', **ist_time}), 200
 
-# === Run the App ===
+# Run app
 if __name__ == '__main__':
-    app.run(debug=False)
-
-
-
+    app.run(debug=True) 

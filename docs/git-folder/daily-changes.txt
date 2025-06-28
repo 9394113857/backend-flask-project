@@ -1,0 +1,50 @@
+# 1. Check current branch
+git branch
+# Shows your current branch.
+
+# 2. Check for local changes
+git status
+# Shows uncommitted changes.
+
+# 3. Stash local changes if any
+git stash
+# Temporarily saves your changes.
+
+# 4. Fetch latest changes from remote
+git fetch origin
+# Updates your local copy of the remote branches.
+
+# 5. Check if your branch is behind the remote branch
+git status
+# Look for "Your branch is behind 'origin/initial-setup' by X commits".
+
+# 6. If your branch is behind, review the changes:
+git log HEAD..origin/initial-setup --oneline
+# Shows commits on the remote branch that you don't have locally.
+
+git diff HEAD origin/initial-setup
+# Shows the actual file changes between your local branch and the remote branch.
+
+# 7. If you want to update, pull latest changes from remote
+git pull origin initial-setup
+# Merges remote changes into your branch.
+
+# 8. Apply stashed changes if any
+git stash pop
+# Restores your stashed changes.
+
+# 9. Stage your changes
+git add .
+# Adds all modified files to the staging area.
+
+# 10. Commit your changes
+git commit -m "Describe your changes"
+# Commits the staged changes with a message.
+
+# 11. Push your changes to the remote branch
+git push origin initial-setup
+# Uploads your commits to the remote repository.
+
+# 12. Merge another branch into your current branch (if needed)
+git merge <branch-name>
+# Merges the specified branch into your current branch.
